@@ -3,16 +3,23 @@ import axios from "axios";
 import "./Weather.css";
 
 export default function Weather() {
-  const [ready, setReady] = useState(false);
-  const [temperature, setTemperature] = useState(null);
+  const [weatherData, setWeatherData] = useState({ ready: false });
 
   function handleResponse(response) {
     console.log(response.data);
-    setTemperature(response.data.main.temp);
-    setReady(true);
+    setWeatherData({
+      ready: true,
+      temperature: response.data.main.temp,
+      humidity: response.data.main.humidity,
+      date: "Thursday 05:00",
+      wind: response.data.wind.speed,
+      description: response.data.weather[0].description,
+      iconUrl: "https://ssl.gstatic.com/onebox/weather/64/fog.png",
+      city: response.data.name,
+    });
   }
 
-  if (ready) {
+  if (weatherData.ready) {
     return (
       <div className="Weather">
         <form>
@@ -34,21 +41,23 @@ export default function Weather() {
             </div>
           </div>
         </form>
-        <h1>Cape Town</h1>
+        <h1>{weatherData.city}</h1>
         <ul>
-          <li>Thursday</li>
-          <li>Clear with periodic clouds</li>
+          <li>{weatherData.date}</li>
+          <li>{weatherData.description}</li>
         </ul>
         <div className="row mt-3">
           <div className="col-6">
             <div className="clearfix">
               <img
-                src="https://ssl.gstatic.com/onebox/weather/64/sunny_s_cloudy.png"
-                alt="Clear"
+                src={weatherData.iconUrl}
+                alt={weatherData.description}
                 className="float-left"
               />
               <div className="float-left">
-                <span className="temperature">{Math.round(temperature)}</span>
+                <span className="temperature">
+                  {Math.round(weatherData.temperature)}
+                </span>
                 <span className="unit">°C</span>
               </div>
             </div>
@@ -56,8 +65,8 @@ export default function Weather() {
           <div className="col-6">
             <ul>
               <li>Precipitation: 2%</li>
-              <li>Humidity:55%</li>
-              <li>Wind:19km/h</li>
+              <li>Humidity:{weatherData.humidity}%</li>
+              <li>Wind:{Math.round(weatherData.wind)}km/h</li>
             </ul>
           </div>
         </div>
