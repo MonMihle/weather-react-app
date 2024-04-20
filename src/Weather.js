@@ -15,24 +15,24 @@ export default function Weather(props) {
       date: new Date(response.data.dt * 1000),
       wind: response.data.wind.speed,
       description: response.data.weather[0].description,
-      iconUrl: "https://ssl.gstatic.com/onebox/weather/64/fog.png",
+      iconUrl: `https://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`,
       city: response.data.name,
     });
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    search();
+  }
+
+  function handleCityChange(event) {
+    setCity(event.target.value);
   }
 
   function search() {
     const apiKey = "c11eb907238f0b8255b8ad494906f796";
     let apiURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
     axios.get(apiURL).then(handleResponse);
-  }
-
-  function handleSubmit(event) {
-    event.preventDefault();
-  }
-
-  function handleCityChange(event) {
-    setCity(event.target.value);
-    search();
   }
 
   if (weatherData.ready) {
