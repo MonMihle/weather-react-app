@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import NewDate from "./NewDate";
 import axios from "axios";
 import "./Weather.css";
 
@@ -11,7 +12,7 @@ export default function Weather() {
       ready: true,
       temperature: response.data.main.temp,
       humidity: response.data.main.humidity,
-      date: "Thursday 05:00",
+      date: new Date(response.data.dt * 1000),
       wind: response.data.wind.speed,
       description: response.data.weather[0].description,
       iconUrl: "https://ssl.gstatic.com/onebox/weather/64/fog.png",
@@ -43,7 +44,9 @@ export default function Weather() {
         </form>
         <h1>{weatherData.city}</h1>
         <ul>
-          <li>{weatherData.date}</li>
+          <li>
+            <NewDate date={weatherData.date} />
+          </li>
           <li>{weatherData.description}</li>
         </ul>
         <div className="row mt-3">
@@ -64,7 +67,7 @@ export default function Weather() {
           </div>
           <div className="col-6">
             <ul>
-              <li>Precipitation: 2%</li>
+              <li>Precipitation:2%</li>
               <li>Humidity:{weatherData.humidity}%</li>
               <li>Wind:{Math.round(weatherData.wind)}km/h</li>
             </ul>
